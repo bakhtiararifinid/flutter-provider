@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_provider/counter_provider.dart';
+import 'package:flutter_provider/providers/decrement_counter.dart';
+import 'package:flutter_provider/providers/increment_counter.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
@@ -7,14 +8,17 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ChangeNotifierProvider<CounterProvider>(
-        builder: (context) => CounterProvider(0),
-        child: MyHomePage(title: 'Flutter Demo Home Page'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(builder: (_) => IncrementCounterProvider()),
+        ChangeNotifierProvider(builder: (_) => DecrementCounterProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );
   }
@@ -32,7 +36,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    final counterProvider = Provider.of<CounterProvider>(context);
+    final incrementCounterProvider = Provider.of<IncrementCounterProvider>(context);
+    final decrementCounterProvider = Provider.of<DecrementCounterProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,10 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'You have pushed the increment button this many times:',
             ),
             Text(
-              '${counterProvider.counter}',
+              '${incrementCounterProvider.counter}',
+              style: Theme.of(context).textTheme.display1,
+            ),
+            SizedBox(height: 32),
+            Text(
+              'You have pushed the decrement button this many times:',
+            ),
+            Text(
+              '${decrementCounterProvider.counter}',
               style: Theme.of(context).textTheme.display1,
             ),
           ],
@@ -56,17 +69,19 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: counterProvider.loading ? null : counterProvider.increment,
+            onPressed:
+                incrementCounterProvider.loading ? null : incrementCounterProvider.increment,
             tooltip: 'Increment',
             child: Icon(Icons.add),
-            backgroundColor: counterProvider.loading ? Colors.grey : null,
+            backgroundColor: incrementCounterProvider.loading ? Colors.grey : null,
           ),
           SizedBox(height: 10),
           FloatingActionButton(
-            onPressed: counterProvider.loading ? null : counterProvider.decrement,
+            onPressed:
+                decrementCounterProvider.loading ? null : decrementCounterProvider.decrement,
             tooltip: 'Decrement',
             child: Icon(Icons.remove),
-            backgroundColor: counterProvider.loading ? Colors.grey : null,
+            backgroundColor: decrementCounterProvider.loading ? Colors.grey : null,
           )
         ],
       ),
