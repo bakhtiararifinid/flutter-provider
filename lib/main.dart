@@ -56,15 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           FloatingActionButton(
-            onPressed: counterProvider.increment,
+            onPressed: counterProvider.loading ? null : counterProvider.increment,
             tooltip: 'Increment',
             child: Icon(Icons.add),
+            backgroundColor: counterProvider.loading ? Colors.grey : null,
           ),
           SizedBox(height: 10),
           FloatingActionButton(
-            onPressed: counterProvider.decrement,
+            onPressed: counterProvider.loading ? null : counterProvider.decrement,
             tooltip: 'Decrement',
             child: Icon(Icons.remove),
+            backgroundColor: counterProvider.loading ? Colors.grey : null,
           )
         ],
       ),
