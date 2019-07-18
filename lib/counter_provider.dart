@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 class CounterProvider with ChangeNotifier {
@@ -7,13 +9,13 @@ class CounterProvider with ChangeNotifier {
 
   get counter => _counter;
 
-  void increment() {
+  Future<void> increment() => Future.delayed(Duration(seconds: 3), () {
     _counter++;
     notifyListeners();
-  }
+  });
 
-  void decrement() {
+  Future<void> decrement() => Future.delayed(Duration(seconds: 3), () {
     _counter--;
     notifyListeners();
-  }
+  });
 }
